@@ -51,6 +51,26 @@ namespace Courseopt.Controllers
             return NoContent();
         }
 
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<UserDTO>> Create([FromBody] RegisterDto dto)
+        {
+            if (string.IsNullOrEmpty(dto.Username) || string.IsNullOrEmpty(dto.Password))
+                return BadRequest("Username и Password обязательны");
+
+            // Проверка на уникальность username
+            if (await _context.Users.AnyAsync(u => u.Username == dto.Username))
+                return BadRequest("Пользователь с таким username уже существует");
+
+            var user = _mapper.Map<User>(dto);
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var userDto = _mapper.Map<UserDTO>(user);
+            return CreatedAtAction(nameof(GetAll), new { id = user.Id }, userDto);
+        }
         // -----------------------------------
         //              DELETE
         // -----------------------------------

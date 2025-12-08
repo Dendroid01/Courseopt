@@ -7,6 +7,7 @@ import Orders from "./components/Pages/Orders";
 import Products from "./components/Pages/Products";
 import Customers from "./components/Pages/Customers";
 import Suppliers from "./components/Pages/Suppliers";
+import AdminPanel from "./components/Pages/AdminPanel";
 import Login from "./Auth/Login";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./Auth/PrivateRoute";
@@ -75,6 +76,14 @@ function App() {
             element={
               <PrivateRoute roles={["admin", "product_manager"]}>
                 <Suppliers />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <AdminPanel />
               </PrivateRoute>
             }
           />

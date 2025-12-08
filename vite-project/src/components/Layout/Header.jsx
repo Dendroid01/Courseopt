@@ -14,6 +14,7 @@ export default function Header() {
     { path: "/products", label: "Склад", roles: ["admin", "product_manager"]  },
     { path: "/customers", label: "Клиенты", roles: ["admin", "product_manager"] },
     { path: "/suppliers", label: "Поставщики", roles: ["admin", "product_manager"]  },
+    { path: "/admin", label: "Админ", roles: ["admin"] },
   ];
 
   const activeClass = "bg-blue-100 text-blue-800 font-semibold";
@@ -28,6 +29,8 @@ export default function Header() {
       {/* Навигация по центру */}
       <nav className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex space-x-2">
         {links.map(link => {
+          if (link.path === "/admin" && role !== "admin") return null;
+          
           const hasAccess = !link.roles || link.roles.includes(role);
 
           return (

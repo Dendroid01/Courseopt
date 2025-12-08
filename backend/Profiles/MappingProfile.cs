@@ -48,6 +48,9 @@ namespace Courseopt.Profiles
                 .ForMember(dest => dest.DeliveryItems, opt => opt.Ignore())
                 .ForMember(dest => dest.SupplierInnNavigation, opt => opt.Ignore());
 
+            CreateMap<User, UserDTO>();
+            CreateMap<RegisterDto, User>()
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
 
             CreateMap<ProductCategory, string>().ConvertUsing(src => src.ToString());
             CreateMap<string, ProductCategory>().ConvertUsing(src => Enum.Parse<ProductCategory>(src));
