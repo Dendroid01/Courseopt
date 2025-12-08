@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Courseopt.Models;
 using Courseopt.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Courseopt.Controllers
 {
@@ -21,6 +22,7 @@ namespace Courseopt.Controllers
 
         // GET all deliveries
         [HttpGet]
+        [Authorize(Roles = "admin,product_manager,accountant,worker")]
         public async Task<ActionResult<IEnumerable<DeliveryDto>>> GetDeliveries()
         {
             var deliveries = await _context.Deliveries
@@ -34,6 +36,7 @@ namespace Courseopt.Controllers
 
         // GET delivery by ID
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,product_manager,accountant,worker")]
         public async Task<ActionResult<DeliveryDto>> GetDelivery(int id)
         {
             var delivery = await _context.Deliveries
@@ -50,6 +53,7 @@ namespace Courseopt.Controllers
 
         // POST
         [HttpPost]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<ActionResult<DeliveryDto>> CreateDelivery(DeliveryDto dto)
         {
             var delivery = _mapper.Map<Delivery>(dto);
@@ -81,6 +85,7 @@ namespace Courseopt.Controllers
 
         // PUT
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<ActionResult<DeliveryDto>> UpdateDelivery(int id, DeliveryDto dto)
         {
             if (id != dto.Id)
@@ -141,6 +146,7 @@ namespace Courseopt.Controllers
 
         // DELETE
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteDelivery(int id)
         {
             var delivery = await _context.Deliveries

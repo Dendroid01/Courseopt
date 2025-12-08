@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Courseopt.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Courseopt.Controllers
 {
@@ -20,6 +21,7 @@ namespace Courseopt.Controllers
         /// Пример: DELETE /api/orders/4/items/4600000000141
         /// </summary>
         [HttpDelete("{barcode}")]
+        [Authorize(Roles = "admin,product_manager,worker")]
         public async Task<IActionResult> DeleteOrderItem(int deliveryId, string barcode)
         {
             var item = await _context.DeliveryItems

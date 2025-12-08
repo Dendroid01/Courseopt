@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Courseopt.Models;
 using Courseopt.DTOs;
 using Courseopt.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Courseopt.Controllers;
 
@@ -18,6 +19,7 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "admin,product_manager,accountant,worker")]
     public async Task<ActionResult<DashboardDto>> GetDashboard()
     {
         var dto = new DashboardDto

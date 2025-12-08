@@ -4,6 +4,7 @@ using AutoMapper;
 using Courseopt.Models;
 using Courseopt.Enums;
 using Courseopt.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Courseopt.Controllers
 {
@@ -21,6 +22,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin,product_manager,worker,accountant")]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
             // Получаем все продукты
@@ -70,6 +72,7 @@ namespace Courseopt.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,product_manager,worker,accountant")]
         public async Task<ActionResult<ProductDto>> GetProduct(string id)
         {
             var product = await _context.Products.FindAsync(id);
@@ -78,6 +81,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<ActionResult<ProductDto>> CreateProduct(ProductDto dto)
         {
             var product = _mapper.Map<Product>(dto);
@@ -87,6 +91,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<IActionResult> UpdateProduct(string id, ProductDto dto)
         {
             if (id != dto.Barcode) return BadRequest();
@@ -99,6 +104,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
             var product = await _context.Products.FindAsync(id);

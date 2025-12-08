@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using Courseopt.Models;
 using Courseopt.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Courseopt.Controllers
 {
@@ -26,6 +27,7 @@ namespace Courseopt.Controllers
         //               LOGIN
         // -----------------------------------
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<LoginResponseDto>> Login(AuthBaseDto dto)
         {
             var user = await _context.Users
@@ -49,7 +51,7 @@ namespace Courseopt.Controllers
         //              REGISTER
         // -----------------------------------
         [HttpPost("register")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDto dto)
         {
             if (await _context.Users.AnyAsync(u => u.Username == dto.Username))

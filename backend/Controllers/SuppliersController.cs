@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Courseopt.Models;
 using Courseopt.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Courseopt.Controllers
 {
@@ -20,6 +21,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<ActionResult<IEnumerable<SupplierDto>>> GetSuppliers()
         {
             var suppliers = await _context.Suppliers.ToListAsync();
@@ -27,6 +29,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<ActionResult<SupplierDto>> GetSupplier(string id)
         {
             var supplier = await _context.Suppliers.FindAsync(id);
@@ -35,6 +38,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<ActionResult<SupplierDto>> CreateSupplier(SupplierDto dto)
         {
             var supplier = _mapper.Map<Supplier>(dto);
@@ -44,6 +48,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<IActionResult> UpdateSupplier(string id, SupplierDto dto)
         {
             if (id != dto.Inn) return BadRequest();
@@ -56,6 +61,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteSupplier(string id)
         {
             var supplier = await _context.Suppliers.FindAsync(id);

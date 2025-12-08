@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Courseopt.Models;
 using Courseopt.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Courseopt.Controllers
 {
@@ -21,6 +22,7 @@ namespace Courseopt.Controllers
 
         // GET: api/Orders
         [HttpGet]
+        [Authorize(Roles = "admin,product_manager,worker,accountant")]
         public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrders()
         {
             var orders = await _context.Orders
@@ -34,6 +36,7 @@ namespace Courseopt.Controllers
 
         // GET: api/Orders/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,product_manager,worker,accountant")]
         public async Task<ActionResult<OrderDto>> GetOrder(int id)
         {
             var order = await _context.Orders
@@ -49,6 +52,7 @@ namespace Courseopt.Controllers
 
         // POST: api/Orders
         [HttpPost]
+        [Authorize(Roles = "admin,product_manager,worker")]
         public async Task<ActionResult<OrderDto>> CreateOrder(OrderDto dto)
         {
             var order = _mapper.Map<Order>(dto);
@@ -77,6 +81,7 @@ namespace Courseopt.Controllers
 
         // PUT: api/Orders/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin,product_manager,worker")]
         public async Task<ActionResult<OrderDto>> UpdateOrder(int id, OrderDto dto)
         {
             if (id != dto.Id) return BadRequest();
@@ -132,6 +137,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
             var order = await _context.Orders.FindAsync(id);

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Courseopt.Models;
 using Courseopt.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Courseopt.Controllers
 {
@@ -20,6 +21,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
         {
             var customers = await _context.Customers.ToListAsync();
@@ -27,6 +29,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<ActionResult<CustomerDto>> GetCustomer(string id)
         {
             var customer = await _context.Customers.FindAsync(id);
@@ -35,6 +38,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerDto dto)
         {
             var customer = _mapper.Map<Customer>(dto);
@@ -44,6 +48,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin,product_manager")]
         public async Task<IActionResult> UpdateCustomer(string id, CustomerDto dto)
         {
             if (id != dto.Inn) return BadRequest();
@@ -56,6 +61,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteCustomer(string id)
         {
             var customer = await _context.Customers.FindAsync(id);
