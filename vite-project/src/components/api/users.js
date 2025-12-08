@@ -1,7 +1,5 @@
 import { useApiClient } from "../utils/apiClient";
 
-const API_URL = "http://localhost:5200/api/suppliers";
-
 export const useUsersApi = () => {
   const { apiClient } = useApiClient();
   const API_URL = "http://localhost:5200/api/users";

@@ -14,6 +14,7 @@ export default function Header() {
     { path: "/products", label: "Склад", roles: ["admin", "product_manager"]  },
     { path: "/customers", label: "Клиенты", roles: ["admin", "product_manager"] },
     { path: "/suppliers", label: "Поставщики", roles: ["admin", "product_manager"]  },
+    { path: "/reports", label: "Отчёты", roles: ["admin", "accountant"] },
     { path: "/admin", label: "Админ", roles: ["admin"] },
   ];
 

@@ -5,9 +5,9 @@ import { useCustomersApi } from "../api/customers";
 import { useProductsApi } from "../api/product";
 
 export default function Orders() {
-  const {fetchOrders, updateOrder, deleteOrder, createOrder, deleteOrderItem } = useOrdersApi();
-  const {fetchCustomers} = useCustomersApi();
-  const {fetchProducts} = useProductsApi();
+  const { fetchOrders, updateOrder, deleteOrder, createOrder, deleteOrderItem } = useOrdersApi();
+  const { fetchCustomers } = useCustomersApi();
+  const { fetchProducts } = useProductsApi();
   const [orders, setOrders] = useState([]);
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);
@@ -363,7 +363,8 @@ export default function Orders() {
             className="border rounded px-2 py-1"
           />
         </div>
-
+      </div>
+      <div className="flex gap-2 mb-4">
         <button
           onClick={() =>
             setSelectedOrder({
@@ -621,7 +622,7 @@ export default function Orders() {
               <button
                 onClick={handleDelete}
                 disabled={saving || selectedOrder.id === 0}
-                
+
                 className="bg-red-200 px-4 py-2 rounded"
               >
                 Удалить
