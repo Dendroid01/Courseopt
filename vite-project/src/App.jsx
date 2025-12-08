@@ -16,32 +16,40 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Публичная страница */}
           <Route path="/login" element={<Login />} />
 
+          {/* Дашборд — доступ для всех авторизованных */}
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute>
+              <PrivateRoute roles={["admin", "accountant", "product_manager", "worker"]}>
                 <Dashboard />
               </PrivateRoute>
             }
           />
+
+          {/* Поставки */}
           <Route
             path="/deliveries"
             element={
-              <PrivateRoute roles={["admin", "product_manager"]}>
+              <PrivateRoute roles={["admin", "accountant", "product_manager", "worker"]}>
                 <Deliveries />
               </PrivateRoute>
             }
           />
+
+          {/* Заказы */}
           <Route
             path="/orders"
             element={
-              <PrivateRoute roles={["admin", "product_manager", "worker"]}>
+              <PrivateRoute roles={["admin", "accountant", "product_manager", "worker"]}>
                 <Orders />
               </PrivateRoute>
             }
           />
+
+          {/* Склад */}
           <Route
             path="/products"
             element={
@@ -50,6 +58,8 @@ function App() {
               </PrivateRoute>
             }
           />
+
+          {/* Клиенты */}
           <Route
             path="/customers"
             element={
@@ -58,6 +68,8 @@ function App() {
               </PrivateRoute>
             }
           />
+
+          {/* Поставщики */}
           <Route
             path="/suppliers"
             element={
@@ -67,6 +79,7 @@ function App() {
             }
           />
 
+          {/* Редирект с корня на дашборд */}
           <Route path="/" element={<Navigate to="/dashboard" />} />
         </Routes>
       </Router>

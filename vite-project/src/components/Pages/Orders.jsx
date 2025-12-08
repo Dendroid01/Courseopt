@@ -621,6 +621,7 @@ export default function Orders() {
               <button
                 onClick={handleDelete}
                 disabled={saving || selectedOrder.id === 0}
+                
                 className="bg-red-200 px-4 py-2 rounded"
               >
                 Удалить

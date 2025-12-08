@@ -21,7 +21,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin,product_manager")]
+        [Authorize(Roles = "admin,product_manager,accountant")]
         public async Task<ActionResult<IEnumerable<SupplierDto>>> GetSuppliers()
         {
             var suppliers = await _context.Suppliers.ToListAsync();
@@ -29,7 +29,7 @@ namespace Courseopt.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "admin,product_manager")]
+        [Authorize(Roles = "admin,product_manager,accountant")]
         public async Task<ActionResult<SupplierDto>> GetSupplier(string id)
         {
             var supplier = await _context.Suppliers.FindAsync(id);

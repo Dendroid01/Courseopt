@@ -3,16 +3,17 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Header() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, role, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // Добавляем roles к каждой ссылке
   const links = [
-    { path: "/dashboard", label: "Дашборд" },
-    { path: "/deliveries", label: "Поставки" },
-    { path: "/orders", label: "Заказы" },
-    { path: "/products", label: "Склад" },
-    { path: "/customers", label: "Клиенты" },
-    { path: "/suppliers", label: "Поставщики" },
+    { path: "/dashboard", label: "Дашборд", roles: ["admin", "accountant", "product_manager","worker"]},
+    { path: "/deliveries", label: "Поставки", roles: ["admin", "accountant", "product_manager","worker"] },
+    { path: "/orders", label: "Заказы", roles: ["admin", "accountant", "product_manager","worker"]  },
+    { path: "/products", label: "Склад", roles: ["admin", "product_manager"]  },
+    { path: "/customers", label: "Клиенты", roles: ["admin", "product_manager"] },
+    { path: "/suppliers", label: "Поставщики", roles: ["admin", "product_manager"]  },
   ];
 
   const activeClass = "bg-blue-100 text-blue-800 font-semibold";
@@ -26,19 +27,24 @@ export default function Header() {
     <header className="bg-white shadow w-full relative h-16">
       {/* Навигация по центру */}
       <nav className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex space-x-2">
-        {links.map(link => (
-          <NavLink
-            key={link.path}
-            to={link.path}
-            className={({ isActive }) =>
-              `px-4 py-2 rounded cursor-pointer hover:bg-blue-50 ${
-                isActive ? activeClass : "text-gray-700"
-              }`
-            }
-          >
-            {link.label}
-          </NavLink>
-        ))}
+        {links.map(link => {
+          const hasAccess = !link.roles || link.roles.includes(role);
+
+          return (
+            <NavLink
+              key={link.path}
+              to={hasAccess ? link.path : "#"} // если нет доступа, ссылка не кликабельна
+              className={({ isActive }) =>
+                `px-4 py-2 rounded cursor-pointer hover:bg-blue-50 ${
+                  isActive ? activeClass : "text-gray-700"
+                } ${!hasAccess ? "opacity-50 cursor-not-allowed" : ""}`
+              }
+              onClick={e => !hasAccess && e.preventDefault()} // блокируем переход
+            >
+              {link.label}
+            </NavLink>
+          );
+        })}
       </nav>
 
       {/* Пользователь и выход справа */}
