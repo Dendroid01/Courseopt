@@ -1,8 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import Layout from "../Layout/Layout";
-import { fetchCustomers, createCustomer, updateCustomer, deleteCustomer } from "../api/customers";
+import { useCustomersApi } from "../api/customers";
 
 export default function Customers() {
+  const {fetchCustomers, createCustomer, updateCustomer, deleteCustomer} = useCustomersApi();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCustomer, setSelectedCustomer] = useState(null);

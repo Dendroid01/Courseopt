@@ -1,48 +1,15 @@
+// api/products.js
+import { useApiClient } from "../utils/apiClient";
+
 const API_URL = "http://localhost:5200/api/products";
 
-// -------------------------
-// Получение всех товаров
-// -------------------------
-export async function fetchProducts() {
-  const res = await fetch(API_URL);
-  if (!res.ok) throw new Error("Ошибка загрузки товаров");
-  return res.json();
-}
+export const useProductsApi = () => {
+  const { apiClient } = useApiClient();
 
-// -------------------------
-// Создание нового товара
-// -------------------------
-export async function createProduct(product) {
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(product),
-  });
-  if (!res.ok) throw new Error("Ошибка при создании товара");
-  return res.json();
-}
-
-// -------------------------
-// Обновление существующего товара
-// -------------------------
-export async function updateProduct(barcode, product) {
-  const res = await fetch(`${API_URL}/${barcode}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(product),
-  });
-  if (!res.ok) throw new Error("Ошибка при обновлении товара");
-  if (res.status === 204) return null;
-  return res.json();
-}
-
-// -------------------------
-// Удаление товара
-// -------------------------
-export async function deleteProduct(barcode) {
-  const res = await fetch(`${API_URL}/${barcode}`, {
-    method: "DELETE",
-  });
-  if (!res.ok) throw new Error("Ошибка при удалении товара");
-  return true;
-}
+  return {
+    fetchProducts: () => apiClient(API_URL),
+    createProduct: (dto) => apiClient(API_URL, { method: "POST", body: JSON.stringify(dto) }),
+    updateProduct: (barcode, dto) => apiClient(`${API_URL}/${barcode}`, { method: "PUT", body: JSON.stringify(dto) }),
+    deleteProduct: (barcode) => apiClient(`${API_URL}/${barcode}`, { method: "DELETE" }),
+  };
+};

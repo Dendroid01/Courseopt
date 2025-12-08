@@ -1,8 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import Layout from "../Layout/Layout.jsx";
-import { fetchSuppliers, createSupplier, updateSupplier, deleteSupplier } from "../api/suppliers";
+import { useSuppliersApi } from "../api/suppliers";
 
 export default function Suppliers() {
+  const {fetchSuppliers, createSupplier, updateSupplier, deleteSupplier } = useSuppliersApi();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedSupplier, setSelectedSupplier] = useState(null);

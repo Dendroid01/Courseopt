@@ -1,7 +1,12 @@
-export async function fetchDashboard() {
-  const response = await fetch("http://localhost:5200/api/dashboard");
-  if (!response.ok) {
-    throw new Error("Ошибка при загрузке данных Dashboard");
-  }
-  return response.json();
-}
+// api/dashboard.js
+import { useApiClient } from "../utils/apiClient";
+
+const API_URL = "http://localhost:5200/api/dashboard";
+
+export const useDashboardApi = () => {
+  const { apiClient } = useApiClient();
+
+  return {
+    fetchDashboard: () => apiClient(API_URL),
+  };
+};

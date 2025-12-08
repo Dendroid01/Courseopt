@@ -1,10 +1,13 @@
 import { useEffect, useState, useMemo } from "react";
 import Layout from "../Layout/Layout";
-import { fetchDeliveries, createDelivery, updateDelivery, deleteDelivery, deleteDeliveryItem } from "../api/deliveries";
-import { fetchSuppliers } from "../api/suppliers";
-import { fetchProducts } from "../api/product";
+import { useDeliveriesApi} from "../api/deliveries";
+import { useSuppliersApi} from "../api/suppliers";
+import { useProductsApi } from "../api/product";
 
 export default function Deliveries() {
+  const {fetchDeliveries, createDelivery, updateDelivery, deleteDelivery, deleteDeliveryItem} = useDeliveriesApi();
+  const {fetchSuppliers} = useSuppliersApi();
+  const {fetchProducts} = useProductsApi();
   const [deliveries, setDeliveries] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [products, setProducts] = useState([]);

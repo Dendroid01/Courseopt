@@ -1,10 +1,13 @@
 import { useEffect, useState, useMemo } from "react";
 import Layout from "../Layout/Layout";
-import { fetchOrders, updateOrder, deleteOrder, createOrder, deleteOrderItem } from "../api/orders";
-import { fetchCustomers } from "../api/customers";
-import { fetchProducts } from "../api/product";
+import { useOrdersApi } from "../api/orders";
+import { useCustomersApi } from "../api/customers";
+import { useProductsApi } from "../api/product";
 
 export default function Orders() {
+  const {fetchOrders, updateOrder, deleteOrder, createOrder, deleteOrderItem } = useOrdersApi();
+  const {fetchCustomers} = useCustomersApi();
+  const {fetchProducts} = useProductsApi();
   const [orders, setOrders] = useState([]);
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);

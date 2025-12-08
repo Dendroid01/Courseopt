@@ -1,8 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import Layout from "../Layout/Layout";
-import { fetchProducts, createProduct, updateProduct, deleteProduct } from "../api/product";
+import { useProductsApi } from "../api/product";
 
 export default function Products() {
+  const {fetchProducts, createProduct, updateProduct, deleteProduct} = useProductsApi();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);

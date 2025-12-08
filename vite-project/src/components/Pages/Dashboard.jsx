@@ -3,13 +3,17 @@ import Layout from "../Layout/Layout.jsx";
 import Card from "../Dashboard/Card.jsx";
 import RecentDeliveries from "../Dashboard/RecentDeliveries.jsx";
 import RecentOrders from "../Dashboard/RecentOrders.jsx";
-import { fetchDashboard } from "../api/dashboard.js";
-import { fetchOrder, updateOrder, deleteOrder, createOrder, deleteOrderItem } from "../api/orders.js";
-import { fetchCustomers } from "../api/customers";
-import { fetchProducts } from "../api/product";
+import { useDashboardApi } from "../api/dashboard.js";
+import { useOrdersApi } from "../api/orders.js";
+import { useCustomersApi } from "../api/customers";
+import { useProductsApi } from "../api/product";
 import OrderModal from "../Modals/OrderModal.jsx";
 
 const Dashboard = () => {
+  const {fetchDashboard} = useDashboardApi();
+  const {fetchProducts} = useProductsApi();
+  const {fetchCustomers} = useCustomersApi();
+  const {fetchOrder, updateOrder, deleteOrder, createOrder, deleteOrderItem} = useOrdersApi();
   const [data, setData] = useState(null);
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);
