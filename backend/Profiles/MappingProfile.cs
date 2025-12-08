@@ -57,6 +57,9 @@ namespace Courseopt.Profiles
 
             CreateMap<Status, string>().ConvertUsing(src => src.ToString());
             CreateMap<string, Status>().ConvertUsing(src => Enum.Parse<Status>(src));
+
+            CreateMap<UserRole, string>().ConvertUsing(src => src.ToString());
+            CreateMap<string, UserRole>().ConvertUsing(src => Enum.Parse<UserRole>(src));
         }
     }
 }

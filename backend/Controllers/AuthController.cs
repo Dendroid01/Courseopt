@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BCrypt.Net;
 using Courseopt.Models;
-using Courseopt.Enums;
 using Courseopt.DTOs;
 
 namespace Courseopt.Controllers
@@ -25,30 +22,35 @@ namespace Courseopt.Controllers
             _config = config;
         }
 
+        // -----------------------------------
+        //               LOGIN
+        // -----------------------------------
         [HttpPost("login")]
-        public async Task<ActionResult<LoginResponseDto>> Login(LoginRequestDto dto)
+        public async Task<ActionResult<LoginResponseDto>> Login(AuthBaseDto dto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
+            var user = await _context.Users
+                .SingleOrDefaultAsync(u => u.Username == dto.Username);
 
-            if (user == null)
-                return Unauthorized("Invalid username or password");
-
-            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 return Unauthorized("Invalid username or password");
 
             string token = GenerateJwt(user);
 
             return new LoginResponseDto
             {
-                Token = token,
+                UserId = user.Id,
                 Username = user.Username,
-                Role = user.Role.ToString()
+                Role = user.Role,
+                Token = token
             };
         }
 
+        // -----------------------------------
+        //              REGISTER
+        // -----------------------------------
         [HttpPost("register")]
-        //[Authorize(Roles = "admin")] // ← Включишь, когда готов
-        public async Task<ActionResult> Register(RegisterRequestDto dto)
+        //[Authorize(Roles = "admin")]
+        public async Task<ActionResult<UserDTO>> Register(RegisterDto dto)
         {
             if (await _context.Users.AnyAsync(u => u.Username == dto.Username))
                 return Conflict("User already exists");
@@ -63,9 +65,17 @@ namespace Courseopt.Controllers
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
 
-            return Ok("User created");
+            return Ok(new UserDTO
+            {
+                Id = newUser.Id,
+                Username = newUser.Username,
+                Role = newUser.Role
+            });
         }
 
+        // -----------------------------------
+        //            JWT GENERATION
+        // -----------------------------------
         private string GenerateJwt(User user)
         {
             var key = new SymmetricSecurityKey(
@@ -76,7 +86,7 @@ namespace Courseopt.Controllers
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim("userId", user.Id.ToString()),
                 new Claim("username", user.Username),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
