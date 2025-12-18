@@ -202,41 +202,23 @@ export default function Orders() {
     setSaving(true);
 
     try {
-      const updatedOrder =
-        selectedOrder.id === 0
-          ? await createOrder(selectedOrder)
-          : await updateOrder(selectedOrder.id, selectedOrder);
+      const updated = selectedOrder.id === 0
+        ? await createOrder(selectedOrder)
+        : await updateOrder(selectedOrder.id, selectedOrder);
 
-      // -------------------------------
-      // Подставляем актуальные остатки
-      const updatedWithStock = {
-        ...updatedOrder,
-        items: updatedOrder.items.map(item => {
-          const foundProduct = products.find(p => p.barcode === item.productBarcode);
-          return {
-            ...item,
-            stock: foundProduct?.currentStock ?? 0,
-            suggestions: []
-          };
-        })
-      };
-      // -------------------------------
+      // Обновляем список заказов с сервера
+      await loadOrders();
 
-      // Обновляем состояние заказов
-      setOrders(prev =>
-        prev.some(o => o.id === updatedWithStock.id)
-          ? prev.map(o => (o.id === updatedWithStock.id ? updatedWithStock : o))
-          : [...prev, updatedWithStock]
-      );
-
-      // Обновляем выбранный заказ
-      setSelectedOrder(updatedWithStock);
+      // Закрываем форму
+      setSelectedOrder(null);
     } catch (err) {
       alert("Ошибка при сохранении: " + err.message);
     } finally {
       setSaving(false);
     }
   };
+
+
 
 
 
